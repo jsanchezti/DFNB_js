@@ -177,6 +177,7 @@ SELECT DISTINCT
 	s.open_date,
 	s.close_date,
 	s.open_close_code,
+	s.loan_amt,
 	s.prod_id
 INTO dbo.tblAccountDim
 FROM dbo.stg_p1 AS s
@@ -187,6 +188,7 @@ SELECT DISTINCT
 	s.open_date,
 	s.close_date,
 	s.open_close_code,
+	s.loan_amt,
 	s.prod_id
 FROM dbo.stg_p1 s
 ORDER BY s.acct_id;
@@ -199,6 +201,7 @@ SELECT DISTINCT
 	s.open_date,
 	s.close_date,
 	s.open_close_code,
+	s.loan_amt,
 	s.prod_id
 FROM dbo.stg_p1 s
 ORDER BY s.acct_id ASC;

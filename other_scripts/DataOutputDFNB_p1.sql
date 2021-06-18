@@ -30,9 +30,11 @@ distributed under the same license terms.
 
 -- 1) account_customer_branch
 SELECT v.branch_code AS 'Branch Code'
+	 , v.branch_desc AS 'Branch Name'
      , v.cust_id AS 'Customer ID'
      , v.gender AS 'Gender'
      , v.acct_id AS 'Account ID'
+	 , v.loan_amt AS 'Loan Amount'
      , v.open_close_code AS 'Status Account'
      , v.year_opened AS 'Account Year Opened'
      , v.year_closed AS 'Account Year Closed'

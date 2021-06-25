@@ -54,3 +54,24 @@ SELECT v.year_opened AS 'Year'
 SELECT v.branch_code AS 'Branch Code'
      , v.open_close_code AS 'Open Close Accounts'
   FROM dbo.v_open_close_account_branches AS v;
+
+  /***** Project 2*/
+
+--5) Transaction Current Performance
+SELECT v.tran_id AS 'Transaction ID'
+     , tran_date AS 'Transaction Date'
+     , tran_amt AS 'Transaction Amount'
+     , tran_fee_prct AS 'Transaction Fee Percentage'
+     , tran_fee_amt AS 'Transaction Fee Amount'
+     , tran_type_desc AS 'Transaction Type Description'
+     , acct_id AS 'Account ID'
+     , branch_desc AS 'Branch ID'
+  FROM dbo.v_transaction_current_performance AS v;
+
+--6)  Transaction Fee Amount Performance
+SELECT tran_year AS 'Transaction Year'
+     , total_tran_fee_amt AS 'Total Transactions Fee Amount'
+     , branch_desc AS 'Branch Description'
+  FROM dbo.v_transaction_fee_amount_performance;
+
+

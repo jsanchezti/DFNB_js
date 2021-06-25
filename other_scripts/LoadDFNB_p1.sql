@@ -9,6 +9,7 @@ MODIFICATION LOG:
 Ver       Date         Author       Description
 -------   ----------   ----------   -----------------------------------------------------------------------------
 1.0       06/14/2021   JSANCHEZ      1. Create tables to implement a dimentional model in MSSQL server.
+1.1       06/21/2021   JSANCHEZ      2. Create tables dbo.tblTransactionFact and dbo.tblTransactionType.
 
 
 
@@ -166,6 +167,33 @@ IF EXISTS
 END;
 
 --END REMOVING CONSTRAINT FK
+--REMOVING CONSTRAINT Project 2
+IF EXISTS
+(
+    SELECT fk.*
+      FROM sys.foreign_keys AS fk
+     WHERE fk.name = 'FK_tblTransactionFact_tblBranchDim'
+           AND parent_object_id = OBJECT_ID(N'dbo.tblTransactionFact')
+)
+    BEGIN
+
+        ALTER TABLE dbo.tblTransactionFact DROP CONSTRAINT FK_tblTransactionFact_tblBranchDim;
+
+END;
+IF EXISTS
+(
+    SELECT fk.*
+      FROM sys.foreign_keys AS fk
+     WHERE fk.name = 'FK_tblTransactionFact_tblTransactionType'
+           AND parent_object_id = OBJECT_ID(N'dbo.tblTransactionFact')
+)
+    BEGIN
+
+        ALTER TABLE dbo.tblTransactionFact DROP CONSTRAINT FK_tblTransactionFact_tblTransactionType;
+
+END;
+
+--END REMOVING CONSTRAINT Project 2
 
 
 --2) Creating Dimension Tables
@@ -435,9 +463,71 @@ ORDER BY accountfact_id;
 
 --END Creating Dimension Tables
 
+/******PROJECT 2 **************/
+-- 2.1) CREATING TABLES from dbo.stg_p2
+
+--dbo.tblTransactionType
+--create
+DROP TABLE dbo.tblTransactionTypeDim;
+SELECT DISTINCT 
+       s.tran_type_id
+     , s.tran_type_code
+     , s.tran_type_desc
+     , s.tran_fee_prct
+INTO dbo.tblTransactionTypeDim
+  FROM dbo.stg_p2 s
+WHERE 1=2
+ORDER BY tran_type_id;
+
+--Load Data
+TRUNCATE TABLE dbo.tblTransactionTypeDim;
+INSERT INTO dbo.tblTransactionTypeDim
+SELECT DISTINCT 
+       s.tran_type_id
+     , s.tran_type_code
+     , s.tran_type_desc
+     , s.tran_fee_prct
+FROM dbo.stg_p2 s
+ORDER BY tran_type_id ASC;
+----END dbo.tblTransactionType
+
+--dbo.tblTransactionFact
+DROP TABLE dbo.tblTransactionFact;
+SELECT s.tran_date
+     , s.tran_time
+     , s.cur_cust_req_ind
+     , s.tran_amt
+     , s.tran_fee_amt
+	 , s.tran_type_id
+	 , s.acct_id
+	 ,s.branch_id
+INTO dbo.tblTransactionFact
+FROM dbo.stg_p2 AS s
+WHERE 1=2;
+
+ALTER TABLE dbo.tblTransactionFact ADD tran_id INT IDENTITY(1,1);
+
+--Load Data
+TRUNCATE TABLE dbo.tblTransactionFact;
+
+INSERT INTO dbo.tblTransactionFact
+SELECT s.tran_date
+     , s.tran_time
+     , s.cur_cust_req_ind
+     , s.tran_amt
+     , s.tran_fee_amt
+	 , s.tran_type_id
+	 , s.acct_id
+	 ,s.branch_id
+FROM dbo.stg_p2 AS s
+WHERE s.acct_id <> -1;
+--END dbo.tblTransactionFact
+
+/**END PROJECT 2*/
+
 --3) Add contraints
 
-/* ADD CONTRAINTS*/
+/* ADD CONTRAINTS Project 1*/
 
 -- tblBranchDim FK
 -- area_id
@@ -479,3 +569,16 @@ ALTER TABLE dbo.tblAccountFact
 ADD CONSTRAINT FK_tblAccountFact_tblAccountDim FOREIGN KEY (acct_id) REFERENCES dbo.tblAccountDim (acct_id);
 
 --END ADD CONSTRAINTS
+
+/***********ADD CONTRAINT PROJECT 2**********/
+--dbo.tblTransactionFact->dbo.tblTransactionType
+ALTER TABLE dbo.tblTransactionFact	
+ADD CONSTRAINT FK_tblTransactionFact_tblTransactionType FOREIGN KEY (tran_type_id) REFERENCES dbo.tblTransactionTypeDim (tran_type_id);
+
+--dbo.tblTransactionFact->dbo.tblBranchDim
+ALTER TABLE dbo.tblTransactionFact 
+ADD CONSTRAINT FK_tblTransactionFact_tblBranchDim FOREIGN KEY (branch_id) REFERENCES dbo.tblBranchDim (branch_id);
+
+--dbo.tblTransactionFact-> dbo.tblAccountDim
+ALTER TABLE dbo.tblTransactionFact  
+ADD CONSTRAINT FK_tblTransactionFact_tblAccountDim FOREIGN KEY (acct_id) REFERENCES dbo.tblAccountDim (acct_id);

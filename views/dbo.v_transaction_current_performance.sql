@@ -4,7 +4,7 @@ GO
 CREATE VIEW dbo.v_transaction_current_performance
 AS 
 SELECT f.tran_id
-     , FORMAT(f.tran_date,'yyyy') AS tran_date
+     , FORMAT(f.tran_date,'MM-dd-yyyy') AS tran_date
      , f.tran_amt
      , td.tran_fee_prct
      , f.tran_fee_amt

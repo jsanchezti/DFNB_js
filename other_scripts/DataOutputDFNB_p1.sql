@@ -9,6 +9,7 @@ MODIFICATION LOG:
 Ver       Date         Author       Description
 -------   ----------   ----------   -----------------------------------------------------------------------------
 1.0       06/14/2021   JSANCHEZ      1. Create tables to implement a dimentional model in MSSQL server.
+1.1       06/25/2021   JSANCHEZ      2. Create two views for transaction tables.
 
 
 
@@ -73,5 +74,10 @@ SELECT tran_year AS 'Transaction Year'
      , total_tran_fee_amt AS 'Total Transactions Fee Amount'
      , branch_desc AS 'Branch Description'
   FROM dbo.v_transaction_fee_amount_performance;
+
+--7)  Type transaction Performance
+SELECT tran_type_desc AS 'Transaction Type Description'
+     , total_tran_amt AS 'Total Transaction Amount'
+  FROM dbo.v_type_transaction_performance;
 
 

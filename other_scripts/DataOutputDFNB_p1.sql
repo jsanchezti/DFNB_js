@@ -80,4 +80,23 @@ SELECT tran_type_desc AS 'Transaction Type Description'
      , total_tran_amt AS 'Total Transaction Amount'
   FROM dbo.v_type_transaction_performance;
 
+/*******Project 3**********/
+--8)  Customer Account Branch Summary
+SELECT v.branch_id AS 'Branch ID'
+     , v.branch_desc AS 'Branch Description'
+     , v.branch_code AS 'Branch Code'
+     , v.cust_id AS 'Customer ID'
+     , v.open_date AS 'Open Date'
+     , v.close_date AS 'Close Date'
+     , v.open_close_code AS 'Open Close Code'
+  FROM dbo.v_branch_cust_acct_summary AS v;
 
+--9) Branch Transaction Type Summary
+SELECT v.branch_code AS 'Branch Code'
+     , v.branch_desc AS 'Branch Description'
+     , v.tran_date AS 'Transaction Date'
+     , v.tran_id AS 'Transaction ID'
+     , v.tran_type_id AS 'Transaction Type ID'
+     , v.tran_type_code AS 'Transaction Type Code'
+     , v.tran_type_desc AS 'Transaction Type Description'
+  FROM dbo.v_branch_tran_type_summary AS v;

@@ -515,6 +515,90 @@ WHERE s.acct_id <> -1;
 
 /**END PROJECT 2*/
 
+/*****PROJECT 3**********************/
+-- Summary table dbo.tblBranchTranTypeSum
+
+--Create table
+SELECT bd.branch_code
+     , bd.branch_desc
+     , tf.tran_date
+     , tf.tran_id
+     , ttd.tran_type_id
+     , ttd.tran_type_code
+     , tran_type_desc
+  INTO dbo.tblBranchTranTypeSum
+  FROM dbo.tblBranchDim AS bd
+       JOIN
+       dbo.tblTransactionFact AS tf ON bd.branch_id = tf.branch_id
+       JOIN
+       dbo.tblTransactionTypeDim AS ttd ON tf.tran_type_id = ttd.tran_type_id
+  WHERE 1=2;
+
+  ALTER TABLE dbo.tblBranchTranTypeSum
+  ADD branchtrantypesum_id INT IDENTITY(1,1);
+
+--Load Data
+  INSERT INTO dbo.tblBranchTranTypeSum
+  SELECT bd.branch_code
+     , bd.branch_desc
+     , tf.tran_date
+     , tf.tran_id
+     , ttd.tran_type_id
+     , ttd.tran_type_code
+     , tran_type_desc
+  FROM dbo.tblBranchDim AS bd
+       JOIN
+       dbo.tblTransactionFact AS tf ON bd.branch_id = tf.branch_id
+       JOIN
+       dbo.tblTransactionTypeDim AS ttd ON tf.tran_type_id = ttd.tran_type_id;
+
+
+
+--Summary table dbo.tblBranCustAcctSum
+
+--Create Table
+SELECT bd.branch_id
+     , bd.branch_desc
+     , bd.branch_code
+     , cd.cust_id
+     , ad.open_date
+     , ad.close_date
+     , ad.open_close_code
+  INTO dbo.tblBranCustAcctSum
+  FROM dbo.tblBranchDim AS bd
+       JOIN
+       dbo.tblCustomerBranchDim AS cbd ON bd.branch_id = cbd.branch_id
+       JOIN
+       dbo.tblCustomerDim AS cd ON cbd.cust_id = cd.cust_id
+       JOIN
+       dbo.tblCustomerAccountDim AS cad ON cd.cust_id = cad.cust_id
+       JOIN
+       dbo.tblAccountDim AS ad ON cad.acct_id = ad.acct_id
+  WHERE 1=2;
+
+  ALTER TABLE dbo.tblBranCustAcctSum
+  ADD branchcustacctsum_id INT IDENTITY(1,1);
+
+-- Load Data
+  INSERT INTO dbo.tblBranCustAcctSum
+  SELECT bd.branch_id
+     , bd.branch_desc
+     , bd.branch_code
+     , cd.cust_id
+     , ad.open_date
+     , ad.close_date
+     , ad.open_close_code
+  FROM dbo.tblBranchDim AS bd
+       JOIN
+       dbo.tblCustomerBranchDim AS cbd ON bd.branch_id = cbd.branch_id
+       JOIN
+       dbo.tblCustomerDim AS cd ON cbd.cust_id = cd.cust_id
+       JOIN
+       dbo.tblCustomerAccountDim AS cad ON cd.cust_id = cad.cust_id
+       JOIN
+       dbo.tblAccountDim AS ad ON cad.acct_id = ad.acct_id;
+/*******END PROJECT 3****************/
+
 --3) Add contraints
 
 /* ADD CONTRAINTS Project 1*/

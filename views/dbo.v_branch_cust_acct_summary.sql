@@ -9,6 +9,7 @@ SELECT bd.branch_id
      , ad.open_date
      , ad.close_date
      , ad.open_close_code
+	 , ad.loan_amt
   FROM dbo.tblBranchDim AS bd
        JOIN
        dbo.tblCustomerBranchDim AS cbd ON bd.branch_id = cbd.branch_id

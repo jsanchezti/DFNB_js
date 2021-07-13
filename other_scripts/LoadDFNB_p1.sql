@@ -557,6 +557,7 @@ SELECT bd.branch_code
 --Summary table dbo.tblBranCustAcctSum
 
 --Create Table
+DROP TABLE dbo.tblBranCustAcctSum;
 SELECT bd.branch_id
      , bd.branch_desc
      , bd.branch_code
@@ -564,6 +565,7 @@ SELECT bd.branch_id
      , ad.open_date
      , ad.close_date
      , ad.open_close_code
+	 , ad.loan_amt
   INTO dbo.tblBranCustAcctSum
   FROM dbo.tblBranchDim AS bd
        JOIN
@@ -580,6 +582,7 @@ SELECT bd.branch_id
   ADD branchcustacctsum_id INT IDENTITY(1,1);
 
 -- Load Data
+TRUNCATE TABLE dbo.tblBranCustAcctSum;
   INSERT INTO dbo.tblBranCustAcctSum
   SELECT bd.branch_id
      , bd.branch_desc
@@ -588,6 +591,7 @@ SELECT bd.branch_id
      , ad.open_date
      , ad.close_date
      , ad.open_close_code
+	 , ad.loan_amt
   FROM dbo.tblBranchDim AS bd
        JOIN
        dbo.tblCustomerBranchDim AS cbd ON bd.branch_id = cbd.branch_id

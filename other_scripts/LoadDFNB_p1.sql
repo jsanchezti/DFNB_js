@@ -601,6 +601,37 @@ TRUNCATE TABLE dbo.tblBranCustAcctSum;
        dbo.tblCustomerAccountDim AS cad ON cd.cust_id = cad.cust_id
        JOIN
        dbo.tblAccountDim AS ad ON cad.acct_id = ad.acct_id;
+
+-- Summary table dbo.tblAcctDimAcctFactSum
+
+--Create table
+SELECT a.acct_id
+     , a.open_date
+     , a.close_date
+     , a.open_close_code
+     , af.as_of_date
+     , af.cur_bal
+INTO dbo.tblAcctDimAcctFactSum
+  FROM dbo.tblAccountDim AS a
+       JOIN
+       dbo.tblAccountFact AS af ON a.acct_id = af.acct_id
+ WHERE 1 = 2;
+
+
+ ALTER TABLE dbo.tblAcctDimAcctFactSum 
+ ADD acctdimacctfacsum_id INT IDENTITY(1,1);
+
+--Load Data
+INSERT INTO dbo.tblAcctDimAcctFactSum
+SELECT a.acct_id
+     , a.open_date
+     , a.close_date
+     , a.open_close_code
+     , af.as_of_date
+     , af.cur_bal
+  FROM dbo.tblAccountDim AS a
+       JOIN
+       dbo.tblAccountFact AS af ON a.acct_id = af.acct_id;
 /*******END PROJECT 3****************/
 
 --3) Add contraints
